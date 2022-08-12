@@ -42,7 +42,8 @@ jobs:
   integration_test:
     name: Run Integration Tests
 
-    needs: [unit_test]
+    needs:
+      - unit_test
 
     runs-on: macos-latest
 
