@@ -36,6 +36,12 @@ jobs:
           path: './coverage/lcov.info'
           min_coverage: 80
           exclude: '**/*_observer.dart **/change.dart'
+          
+      - uses: dorny/test-reporter@v1
+        with:
+          name: Tests Results
+          path: test-results.json
+          reporter: flutter-json
   
   build_android:
     name: Build App - Android
@@ -93,5 +99,5 @@ jobs:
 
       - uses: actions/upload-artifact@v3
         with:
-          path: build/app/outputs/bundle/release/*.ipa
+          path: build/ios/iphoneos/*.ipa
           

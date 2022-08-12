@@ -38,6 +38,12 @@ jobs:
           path: './coverage/lcov.info'
           min_coverage: 80
           exclude: '**/*_observer.dart **/change.dart'
+
+      - uses: dorny/test-reporter@v1
+        with:
+          name: Tests Results
+          path: test-results.json
+          reporter: flutter-json
   
   integration_test:
     name: Run Integration Tests
