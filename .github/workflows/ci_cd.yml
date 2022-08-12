@@ -84,7 +84,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      
+
       - uses: actions/setup-java@v1
         with: 
           java-version: "12.x"
@@ -97,12 +97,11 @@ jobs:
 
       - run: flutter clean
 
-      - run: flutter build apk
+      - run: flutter build apk --release
 
-      - uses: actions/upload-artifact@v3
+      - uses: ncipollo@release-action@v1
         with:
-          name: apk
-          path: build/app/outputs/bundle/release/app-release.apk
+          artificacts: "build/app/outputs/apk/release/*.apk"
           
   build_ios:
     name: Build App - iOS
@@ -129,4 +128,8 @@ jobs:
       - run: flutter clean
 
       - run: flutter build ios lib/main.dart --release --no-codesign
+
+      - uses: ncipollo@release-action@v1
+        with:
+          artifacts: "build/ios/iphoneos/*.ipa"
           
