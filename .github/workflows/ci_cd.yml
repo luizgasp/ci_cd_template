@@ -65,7 +65,7 @@ jobs:
       - uses: ncipollo/release-action@v1
         with:
           artifacts: "build/app/outputs/apk/release/*.apk"
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.TOKEN }}
           
   build_ios:
     name: Build App - iOS
@@ -95,5 +95,5 @@ jobs:
       - uses: ncipollo/release-action@v1
         with:
           artifacts: "build/ios/iphoneos/*.ipa"
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.TOKEN }}
           
