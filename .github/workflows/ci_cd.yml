@@ -3,7 +3,7 @@ name: Github CI/CD Example
 on:
   push:
     tags:
-      - "*"
+      - "v*"
 
 jobs:
   unit_test:
@@ -34,7 +34,7 @@ jobs:
       - uses: VeryGoodOpenSource/very_good_coverage@v1
         with:
           path: './coverage/lcov.info'
-          min_coverage: 0
+          min_coverage: 80
           exclude: '**/*_observer.dart **/change.dart'
   
   build_android:
@@ -62,10 +62,9 @@ jobs:
 
       - run: flutter build apk --release
 
-      - uses: ncipollo/release-action@v1
+      - uses: actions/upload-artifact@v3
         with:
-          artifacts: "build/app/outputs/apk/release/*.apk"
-          token: ${{ secrets.TOKEN }}
+          path: build/app/outputs/bundle/release/app-release.apk
           
   build_ios:
     name: Build App - iOS
@@ -91,9 +90,4 @@ jobs:
       - run: flutter clean
 
       - run: flutter build ios lib/main.dart --release --no-codesign
-
-      - uses: ncipollo/release-action@v1
-        with:
-          artifacts: "build/ios/iphoneos/*.ipa"
-          token: ${{ secrets.TOKEN }}
           
