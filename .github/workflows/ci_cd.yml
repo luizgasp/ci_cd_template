@@ -2,33 +2,90 @@ name: Github CI/CD Example
 
 on:
   push:
-    branches: [main]
-  pull_request:
-    branches: [main]
+    tags:
+      - "*"
 
 jobs:
-  build:
-    name: Run Fluter analyze and test
+  test:
+    name: Flutter Build, Analyze and Test
+
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-java@v1
         with:
           java-version: "12.x"
+
       - uses: subosito/flutter-action@v1
         with:
           channel: "stable"
+
       - run: flutter pub get
+
       - run: flutter analyze
-      - run: flutter format --dry-run --set-exit-if-changed lib/
-      - run: flutter format --dry-run --set-exit-if-changed test/
+
+      - run: flutter test
+
       - run: flutter test --coverage
       - run: flutter test --machine > test-results.json
-      - uses: dorny/test-reporter@v1.4.2
+
+      - uses: VeryGoodOpenSource/very_good_coverage@v1
         with:
-          name: test-results
-          path: test-results.json
-          reporter: flutter-json
-      - uses: VeryGoodOpenSource/very_good_coverage@v1.1.1
-        with:
+          path: './coverage/lcov.info'
           min_coverage: 0
+          exclude: '**/*_observer.dart **/change.dart'
+  
+  build_android:
+    name: Build App - Android
+
+    needs: [test]
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-java@v1
+        with: 
+          java-version: "12.x"
+      
+      - uses: subosito/flutter-action@v1
+        with:
+          channel: "stable"
+
+      - run: flutter pub get
+
+      - run: flutter clean
+
+      # If want to build an AppBundle, just change apk to appbundle
+      - run: flutter build apk
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: apk
+          # If want to build to AppBundle, change .apk to .aab
+          path: build/app/outputs/bundle/release/app-release.apk
+          
+  build_ios:
+    name: Build App - iOS
+
+    needs: [test]
+
+    runs-on: macos-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-java@v1
+        with:
+          java-version: "12.x"
+
+      - uses: subosito/flutter-action@v1
+        with:
+          channel: "stable"
+
+      - run: flutter pub get
+
+      - run: flutter clean
+
+      - run: flutter build ios lib/main.dart --release --no-codesign
+          
