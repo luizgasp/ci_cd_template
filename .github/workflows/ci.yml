@@ -48,7 +48,7 @@ jobs:
     strategy:
       matrix:
         api-level: [29]
-        target: [playstore]
+        target: [default]
     
     steps:
       - uses: actions/checkout@v2
@@ -58,10 +58,10 @@ jobs:
 
       - uses: reactivecircus/android-emulator-runner@v2
         with:
-          target: ${{ matrix.target }}
           api-level: ${{ matrix.api-level }}
+          target: ${{ matrix.target }}
           arch: x86_64
           profile: Nexus 6
-          script: flutter test integration-test
+          script: flutter test integration_test
 
           
