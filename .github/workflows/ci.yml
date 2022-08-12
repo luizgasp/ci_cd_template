@@ -43,7 +43,7 @@ jobs:
 
     needs: [unit_test]
 
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
 
     strategy:
       matrix:
@@ -55,8 +55,6 @@ jobs:
       - uses: actions/setup-java@v1
         with:
           java-version: "12.x"
-
-      - uses: gradle/gradle-build-action@v2
 
       - uses: subosito/flutter-action@v2
         with:
@@ -78,7 +76,7 @@ jobs:
           api-level: ${{ matrix.api-level }}
           force-avd-creation: false
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
-          disable-animations: false
+          disable-animations: true
           script: echo "Generated AVD snapshot for caching."
 
       - name: Run Integration Tests
