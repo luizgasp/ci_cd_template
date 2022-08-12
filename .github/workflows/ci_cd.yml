@@ -64,7 +64,7 @@ jobs:
 
       - uses: actions/upload-artifact@v3
         with:
-          path: build/app/outputs/bundle/release/app-release.apk
+          path: build/app/outputs/apk/release/*.apk
           
   build_ios:
     name: Build App - iOS
@@ -93,5 +93,5 @@ jobs:
 
       - uses: actions/upload-artifact@v3
         with:
-          path: build/app/outputs/bundle/release/app-release.ipa
+          path: build/app/outputs/bundle/release/*.ipa
           
