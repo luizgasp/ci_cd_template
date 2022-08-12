@@ -99,7 +99,7 @@ jobs:
 
       - run: flutter build apk --release
 
-      - uses: ncipollo@release-action@v1
+      - uses: ncipollo/release-action@v1
         with:
           artificacts: "build/app/outputs/apk/release/*.apk"
           
@@ -129,7 +129,7 @@ jobs:
 
       - run: flutter build ios lib/main.dart --release --no-codesign
 
-      - uses: ncipollo@release-action@v1
+      - uses: ncipollo/release-action@v1
         with:
           artifacts: "build/ios/iphoneos/*.ipa"
           
