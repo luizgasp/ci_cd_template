@@ -90,4 +90,8 @@ jobs:
       - run: flutter clean
 
       - run: flutter build ios lib/main.dart --release --no-codesign
+
+      - uses: actions/upload-artifact@v3
+        with:
+          path: build/app/outputs/bundle/release/app-release.ipa
           
