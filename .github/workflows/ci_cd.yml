@@ -57,13 +57,11 @@ jobs:
 
       - run: flutter clean
 
-      # If want to build an AppBundle, just change apk to appbundle
       - run: flutter build apk
 
       - uses: actions/upload-artifact@v3
         with:
           name: apk
-          # If want to build to AppBundle, change .apk to .aab
           path: build/app/outputs/bundle/release/app-release.apk
           
   build_ios:

@@ -8,8 +8,8 @@ on:
 
 
 jobs:
-  build:
-    name: Flutter Build, Analyze and Test
+  unit_test:
+    name: Run Analyze and Unit Tests
 
     runs-on: ubuntu-latest
 
@@ -37,4 +37,5 @@ jobs:
           path: './coverage/lcov.info'
           min_coverage: 0
           exclude: '**/*_observer.dart **/change.dart'
+
           
