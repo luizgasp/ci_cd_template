@@ -6,13 +6,14 @@ on:
       - "*"
 
 jobs:
-  test:
-    name: Flutter Build, Analyze and Test
+  unit_test:
+    name: Run Analyze and Unit Tests
 
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v3
+      
       - uses: actions/setup-java@v1
         with:
           java-version: "12.x"
@@ -36,15 +37,54 @@ jobs:
           min_coverage: 0
           exclude: '**/*_observer.dart **/change.dart'
   
+  integration_test:
+    name: Run Integration Tests
+
+    needs:
+      - unit_test
+
+    runs-on: macos-latest
+
+    strategy:
+      matrix:
+        api-level: [29]
+    
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-java@v1
+        with:
+          java-version: "12.x"
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: "stable"
+
+      - run: flutter pub get
+
+      - name: Run Integration Tests
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: ${{ matrix.api-level }}
+          force-avd-creation: false
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          disable-animations: true
+          profile: Nexus 6
+          script: flutter test integration_test
+
+  
   build_android:
     name: Build App - Android
 
-    needs: [test]
+    needs:
+      - unit_test
+      - integration_test
 
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v2
+      
       - uses: actions/setup-java@v1
         with: 
           java-version: "12.x"
@@ -67,12 +107,15 @@ jobs:
   build_ios:
     name: Build App - iOS
 
-    needs: [test]
+    needs:
+      - unit_test
+      - integration_test
 
     runs-on: macos-latest
 
     steps:
       - uses: actions/checkout@v2
+
       - uses: actions/setup-java@v1
         with:
           java-version: "12.x"
